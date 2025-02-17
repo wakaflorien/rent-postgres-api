@@ -8,16 +8,17 @@ google_id: string;
 email: string;
 display_name: string;
 created_at: Date;
+role: 'renter' | 'host';
 }
 
 export class UserModel {
-static async create({ google_id, email, display_name }: Omit<User, 'id' | 'created_at'>): Promise<User> {
+static async create({ google_id, email, display_name, role }: Omit<User, 'id' | 'created_at'>): Promise<User> {
     const query = `
-    INSERT INTO users (id, google_id, email, display_name)
-    VALUES ($1, $2, $3, $4)
+    INSERT INTO users (id, google_id, email, display_name, role)
+    VALUES ($1, $2, $3, $4, $5)
     RETURNING *
     `;
-    const values = [uuidv4(), google_id, email, display_name];
+    const values = [uuidv4(), google_id, email, display_name, role];
     const result = await db.query(query, values);
     return result.rows[0];
 }
@@ -43,9 +44,11 @@ const query = `
     google_id VARCHAR(255) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     display_name VARCHAR(255) NOT NULL,
+    role VARCHAR(255) NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     )
 `;
 await pool.query(query);
 };
+
 

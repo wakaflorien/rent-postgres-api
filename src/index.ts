@@ -3,6 +3,7 @@ import session from 'express-session';
 import passport from './config/passport';
 import authRoutes from './routes/auth.routes';
 import { createUsersTable } from './models/user.model';
+import { createPropertiesTable } from './models/property.model';
 import { pool as db } from './db/index';
 import dotenv from 'dotenv';
 import { isAuthenticated } from './middleware/auth.middleware';
@@ -13,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 
 // Initialize users table
 createUsersTable(db);
-
+createPropertiesTable(db);
 // Middleware
 app.use(express.json());
 app.use(session({
