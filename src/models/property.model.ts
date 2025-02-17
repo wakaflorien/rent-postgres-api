@@ -33,26 +33,41 @@ export class Property {
     const result = await db.query(query, values);
     return result.rows[0];
   }
+  static async findAll(): Promise<Property[] | null> {
+    const query = "SELECT * FROM properties";
+    const result = await db.query(query);
+    return result.rows || null;
+  }
+  
   static async findById(id: string): Promise<Property | null> {
     const query = "SELECT * FROM properties WHERE id = $1";
     const result = await db.query(query, [id]);
     return result.rows[0] || null;
   }
+
   static async findByHostId(host_id: string): Promise<Property[] | null> {
     const query = "SELECT * FROM properties WHERE host_id = $1";
     const result = await db.query(query, [host_id]);
     return result.rows || null;
   }
+
   static async update(id: string, property: Property): Promise<Property | null> {
     const query = "UPDATE properties SET title = $1, description = $2, price = $3, location = $4, property_type = $5, image_url = $6 WHERE id = $7 RETURNING *";
     const values = [property.title, property.description, property.price, property.location, property.property_type, property.image_url, id];
     const result = await db.query(query, values);
     return result.rows[0] || null;
   } 
+
   static async delete(id: string): Promise<void> {
     const query = "DELETE FROM properties WHERE id = $1";
     await db.query(query, [id]);
   } 
+
+  static async findByLocation(location: string): Promise<Property[] | null> {
+    const query = "SELECT * FROM properties WHERE location = $1";
+    const result = await db.query(query, [location]);
+    return result.rows || null;
+  }
 }
 
 export const createPropertiesTable = async (pool: Pool) => {

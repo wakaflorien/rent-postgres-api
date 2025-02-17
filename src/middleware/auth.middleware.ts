@@ -19,3 +19,18 @@ try {
 }
 };
 
+export const isHost = (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user;
+    if (user?.role !== 'host') {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    next();
+}   
+
+export const isRenter = (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user;
+    if (user?.role !== 'renter') {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    next();
+}

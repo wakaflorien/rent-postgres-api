@@ -13,7 +13,7 @@ router.get('/google/callback',
 passport.authenticate('google', { failureRedirect: '/login' }),
 (req, res) => {
     const token = jwt.sign(
-    { userId: (req.user as any).id },
+    { userId: (req.user as any).id, role: (req.user as any).role },
     process.env.JWT_SECRET!,
     { expiresIn: '24h' }
     );
@@ -21,11 +21,11 @@ passport.authenticate('google', { failureRedirect: '/login' }),
 }
 );
 
-router.get('/success', (req, res) => {
+router.get('/success', isAuthenticated, (req, res) => {
 res.json({ message: 'Authentication successful' });
 });
 
-router.get('/logout', (req, res) => {
+router.get('/logout', isAuthenticated, (req, res) => {
 req.logout(() => {
     res.redirect('/');
 });
