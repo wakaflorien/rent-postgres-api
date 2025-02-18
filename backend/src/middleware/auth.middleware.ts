@@ -1,15 +1,24 @@
 import { Response, NextFunction } from "express";
 import { Request } from "express";
 import jwt from "jsonwebtoken";
-import { User } from "../models/user.model";
+import { User, UserRole } from "../models/user.model";
 
 // Extend Express Request type to include user
 declare global {
   namespace Express {
     interface Request {
-      user?: User;
+      user?: {
+        id: string;
+        email: string;
+        role: "host" | "renter" | "admin";
+      };
     }
   }
+}
+
+export interface JWTPayload {
+  id: string;
+  role: UserRole;
 }
 
 export const isAuthenticated = (
@@ -28,12 +37,68 @@ export const isAuthenticated = (
   const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as User;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
     req.user = decoded;
+
     next();
   } catch (error) {
     return res
       .status(401)
       .json({ message: "Invalid token", data: null, status: "failed" });
   }
+};
+
+export const isHost = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user || req.user?.role !== UserRole.HOST) {
+    return res.status(403).json({
+      message: "Forbidden - Host access required",
+      data: null,
+      status: "failed",
+    });
+  }
+  next();
+};
+
+export const isRenter = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user || req.user?.role !== UserRole.RENTER) {
+    return res.status(403).json({
+      message: "Forbidden - Renter access required",
+      data: null,
+      status: "failed",
+    });
+  }
+  next();
+};
+
+export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user || req.user?.role !== UserRole.ADMIN) {
+    return res
+      .status(403)
+      .json({
+        message: "Forbidden - Admin access required",
+        data: null,
+        status: "failed",
+      });
+  }
+  next();
+};
+
+export const isHostOrRenter = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (
+    !req.user ||
+    (req.user?.role !== UserRole.HOST && req.user?.role !== UserRole.RENTER)
+  ) {
+    return res
+      .status(403)
+      .json({
+        message: "Forbidden - Host or Renter access required",
+        data: null,
+        status: "failed",
+      });
+  }
+  next();
 };

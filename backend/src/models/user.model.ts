@@ -8,7 +8,7 @@ export enum UserRole {
     ADMIN = 'admin'
 }
 export interface User {
-    id?: string;
+    id: string;
     google_id: string;
     email: string;
     display_name: string;

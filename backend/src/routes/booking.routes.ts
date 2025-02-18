@@ -1,8 +1,6 @@
 import { Router } from 'express';
 
-import { Property } from '../models/property.model';
-import { isHost, isRenter } from '../middleware/roleCheck.middleware';
-import { isAuthenticated } from '../middleware/auth.middleware';
+import { isAuthenticated, isHost, isRenter } from '../middleware/auth.middleware';
 import { getBookings, getBookingsByRenterId, updateBookingStatus, deleteBooking, createBooking } from '../controllers/bookings.controller';
 
 const router = Router();
