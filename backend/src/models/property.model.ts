@@ -14,6 +14,12 @@ export interface Property {
   created_at: Date;
 }
 export class Property {
+  static async findAll(): Promise<Property[] | null> {
+    const query = "SELECT * FROM properties";
+    const result = await db.query(query);
+    return result.rows || null;
+  }
+  
   static async create(property: Property): Promise<Property> {
     const query = `
             INSERT INTO properties (id, title, description, price, location, property_type, image_url, host_id)
@@ -32,11 +38,6 @@ export class Property {
     ];
     const result = await db.query(query, values);
     return result.rows[0];
-  }
-  static async findAll(): Promise<Property[] | null> {
-    const query = "SELECT * FROM properties";
-    const result = await db.query(query);
-    return result.rows || null;
   }
   
   static async findById(id: string): Promise<Property | null> {

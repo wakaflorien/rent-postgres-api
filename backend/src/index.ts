@@ -2,7 +2,7 @@ import express from 'express';
 import session from 'express-session';
 import passport from './config/passport';
 import authRoutes from './routes/auth.routes';
-import propertyRoutes from './routes/property.route';
+import propertyRoutes from './routes/property.routes';
 import { createUsersTable } from './models/user.model';
 import { createPropertiesTable } from './models/property.model';
 import { pool as db } from './db/index';
@@ -18,6 +18,7 @@ const PORT = process.env.PORT || 3000;
 createUsersTable(db);
 createPropertiesTable(db);
 createBookingsTable(db);
+
 // Middleware
 app.use(express.json());
 app.use(session({

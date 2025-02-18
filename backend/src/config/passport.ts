@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { UserModel } from "../models/user.model";
+import { UserModel, UserRole } from "../models/user.model";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -36,7 +36,7 @@ passport.use(
           google_id: profile.id,
           email: profile.emails?.[0]?.value || "",
           display_name: profile.displayName,    
-          role: "renter",
+          role: UserRole.HOST,
         });
 
         return done(null, newUser);

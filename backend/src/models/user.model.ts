@@ -2,16 +2,22 @@ import { Pool } from 'pg';
 import { v4 as uuidv4 } from 'uuid';
 import { pool  as db } from '../db/index';
 
+export enum UserRole {
+    RENTER = 'renter',
+    HOST = 'host',
+    ADMIN = 'admin'
+}
 export interface User {
-id: string;
-google_id: string;
-email: string;
-display_name: string;
-created_at: Date;
-role: 'renter' | 'host';
+    id?: string;
+    google_id: string;
+    email: string;
+    display_name: string;
+    created_at: Date;
+    role: UserRole;
 }
 
 export class UserModel {
+
 static async create({ google_id, email, display_name, role }: Omit<User, 'id' | 'created_at'>): Promise<User> {
     const query = `
     INSERT INTO users (id, google_id, email, display_name, role)

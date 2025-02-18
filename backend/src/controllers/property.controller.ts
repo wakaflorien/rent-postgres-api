@@ -103,7 +103,7 @@ export const getAllProperties = async (req: Request, res: Response) => {
             status: "success",
         });
     } catch (error) {
-        res.status(400).json({ message: (error as Error).message, data: null, status: "failed" });
+        res.status(500).json({ message: (error as Error).message, data: null, status: "failed" });
     }
 };
 
