@@ -25,14 +25,15 @@ export class Review {
       RETURNING *   
     `;
 
-    const result = await db.query(query, [
+    const values = [
       uuidv4(),
       review.property_id,
       review.renter_id,
       review.rating,
       review.comment,
-      review.created_at,
-    ]);
+      new Date(),
+    ];
+    const result = await db.query(query, values);
 
     return result.rows[0];
   }
@@ -82,7 +83,7 @@ export class Review {
 export const createReviewTable = async (pool: Pool) => {
   const query = `
     CREATE TABLE IF NOT EXISTS reviews (
-      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      id UUID PRIMARY KEY,
       property_id UUID NOT NULL REFERENCES properties(id),
       renter_id UUID NOT NULL REFERENCES users(id),
       rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
