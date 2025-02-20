@@ -3,22 +3,17 @@ import { Request } from "express";
 import jwt from "jsonwebtoken";
 import { User, UserRole } from "../models/user.model";
 
-// Extend Express Request type to include user
+// Extend Express Request type to include User
 declare global {
   namespace Express {
     interface Request {
-      user?: {
+      User?: {
         id: string;
         email: string;
         role: "host" | "renter" | "admin";
       };
     }
   }
-}
-
-export interface JWTPayload {
-  id: string;
-  role: UserRole;
 }
 
 export const isAuthenticated = (
@@ -37,8 +32,8 @@ export const isAuthenticated = (
   const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
-    req.user = decoded;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    req.User = decoded as User;
 
     next();
   } catch (error) {
@@ -49,7 +44,7 @@ export const isAuthenticated = (
 };
 
 export const isHost = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user || req.user?.role !== UserRole.HOST) {
+  if (!req.User || req.User?.role !== UserRole.HOST) {
     return res.status(403).json({
       message: "Forbidden - Host access required",
       data: null,
@@ -60,7 +55,7 @@ export const isHost = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const isRenter = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user || req.user?.role !== UserRole.RENTER) {
+  if (!req.User || req.User?.role !== UserRole.RENTER) {
     return res.status(403).json({
       message: "Forbidden - Renter access required",
       data: null,
@@ -71,7 +66,7 @@ export const isRenter = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user || req.user?.role !== UserRole.ADMIN) {
+  if (!req.User || req.User?.role !== UserRole.ADMIN) {
     return res
       .status(403)
       .json({
@@ -89,8 +84,8 @@ export const isHostOrRenter = (
   next: NextFunction
 ) => {
   if (
-    !req.user ||
-    (req.user?.role !== UserRole.HOST && req.user?.role !== UserRole.RENTER)
+    !req.User ||
+    (req.User?.role !== UserRole.HOST && req.User?.role !== UserRole.RENTER)
   ) {
     return res
       .status(403)

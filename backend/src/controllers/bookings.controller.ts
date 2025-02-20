@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Booking, BookingStatus } from "../models/booking.model";
-import { v4 as uuidv4 } from "uuid";
 import Joi from "joi";
 
 const bookingSchema = Joi.object({
