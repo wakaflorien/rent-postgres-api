@@ -26,7 +26,7 @@ export class Review {
     `;
 
     const result = await db.query(query, [
-      review.id,
+      uuidv4(),
       review.property_id,
       review.renter_id,
       review.rating,
