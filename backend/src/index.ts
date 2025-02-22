@@ -26,7 +26,7 @@ createReviewTable(db);
 
 // CORS Configuration
 const corsOptions = {
-  origin: ['http://localhost:3001', 'http://127.0.0.1:3001'], // Allow both localhost and 127.0.0.1
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'], // Allow both localhost and 127.0.0.1
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Origin', 'X-Requested-With', 'Accept', 'x-client-key', 'x-client-token', 'x-client-secret', 'Authorization'],
   credentials: true
