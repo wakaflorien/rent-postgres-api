@@ -35,15 +35,11 @@ const corsOptions = {
 // Apply CORS middleware with options
 app.use(cors(corsOptions));
 
-// Additional middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Add pre-flight handling for all routes
 app.options('*', cors(corsOptions));
 
 // Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
     secret: process.env.SESSION_SECRET!,
