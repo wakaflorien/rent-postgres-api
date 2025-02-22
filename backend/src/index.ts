@@ -12,7 +12,7 @@ import reviewRoutes from "./routes/review.route";
 import bookingRoutes from "./routes/booking.routes";
 import { createReviewTable } from "./models/review.model";
 import dotenv from "dotenv";
-import cors from "cors";
+import cors from "cors";  
 dotenv.config();
 
 const app = express();
