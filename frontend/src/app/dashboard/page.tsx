@@ -33,7 +33,6 @@ export default function Dashboard() {
     const { data, loading: propertyLoading, error, message } = useFetch('http://localhost:3000/property/getAll', token);
     const { data: userData, loading: userLoading, error: userError, message: userMessage } = useFetch('http://localhost:3000/auth/profile', token);
 
-    console.log(message, "Message");
     console.log(userMessage, "User Message", userData);
     const [name, setName] = useLocalStorage('name', 'Guest');
 
