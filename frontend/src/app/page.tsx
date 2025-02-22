@@ -7,7 +7,7 @@ import { workSans } from '../utils/font';
 import { PropertyList } from "@/components/PropertyList";
 import { LuSearch } from "react-icons/lu";
 
-const SAMPLE_PROPERTIES: Property[] = [
+export const SAMPLE_PROPERTIES: Property[] = [
   {
     id: '1',
     title: 'Cozy Mountain Cabin',
