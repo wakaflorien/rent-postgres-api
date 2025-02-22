@@ -36,7 +36,7 @@ passport.use(
           google_id: profile.id,
           email: profile.emails?.[0]?.value || "",
           display_name: profile.displayName,    
-          role: UserRole.HOST,
+          role: UserRole.HOST || UserRole.RENTER,
         });
 
         return done(null, newUser);
