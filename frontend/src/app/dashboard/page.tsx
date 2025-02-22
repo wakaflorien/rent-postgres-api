@@ -23,7 +23,7 @@ export default function Dashboard() {
         host_id: 'JQbUJITMdA/tGBchrAwqXwZxmKXukoM9IKTQRTFovgg',
     });
 
-    const { data, loading, error } = useFetch('http://localhost:3001/api/properties');
+    const { data, loading, error } = useFetch('http://localhost:3001/api/v1/property/getAll');
     const [name, setName] = useLocalStorage('name', 'Guest');
 
     console.log(data, loading, error, "Fetched properties");
