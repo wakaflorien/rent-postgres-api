@@ -9,7 +9,9 @@ declare global {
     interface Request {
       User?: {
         id: string;
+        google_id: string;
         email: string;
+        display_name: string;
         role: "host" | "renter" | "admin";
       };
     }

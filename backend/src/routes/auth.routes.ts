@@ -32,10 +32,19 @@ router.get("/logout", isAuthenticated, (req, res) => {
 
 // Protected route example
 router.get("/profile", isAuthenticated, async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "Not authenticated" });
+  }
+
+  const user = req.user as User;
+  console.log(user, "user data");
   res.status(200).json({
-    message: "Profile fetched successfully",
-    data: req.user,
-    status: "success",
+    id: user.id,
+    google_id: user.google_id,
+    email: user.email,
+    display_name: user.display_name,
+    role: user.role,
+    created_at: user.created_at,
   });
 });
 

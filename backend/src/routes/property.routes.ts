@@ -1,5 +1,5 @@
 import express from "express";
-import { isAuthenticated, isHost, isRenter   } from "../middleware/auth.middleware";
+import { isAuthenticated } from "../middleware/auth.middleware";
 import {
   getAllProperties,
   getPropertyById,
@@ -15,11 +15,11 @@ router.get("/getAll", getAllProperties);
 
 router.get("/getById", getPropertyById);
 
-router.post("/create", isAuthenticated, isHost, createProperty);
+router.post("/create", isAuthenticated, createProperty);
 
-router.put("/update", isAuthenticated, isHost, updateProperty);
+router.put("/update", isAuthenticated, updateProperty);
 
-router.delete("/delete", isAuthenticated, isHost, deleteProperty);
+router.delete("/delete", isAuthenticated, deleteProperty);
 
 router.get("/getByHostId", getPropertiesByHostId);
 

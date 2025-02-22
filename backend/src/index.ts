@@ -6,7 +6,6 @@ import propertyRoutes from "./routes/property.routes";
 import { createUsersTable } from "./models/user.model";
 import { createPropertiesTable } from "./models/property.model";
 import { pool as db } from "./db/index";
-import { isAuthenticated } from "./middleware/auth.middleware";
 import { createBookingsTable } from "./models/booking.model";
 import reviewRoutes from "./routes/review.route";
 import bookingRoutes from "./routes/booking.routes";
@@ -34,7 +33,6 @@ const corsOptions = {
 
 // Apply CORS middleware with options
 app.use(cors(corsOptions));
-
 app.options('*', cors(corsOptions));
 
 // Middleware

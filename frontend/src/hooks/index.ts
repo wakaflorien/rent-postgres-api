@@ -2,7 +2,7 @@ import { Property } from "@/@types";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-export function useFetch(url: string, token: string | null  ) {
+export function useFetch(url: string, token: string | null) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -13,6 +13,7 @@ export function useFetch(url: string, token: string | null  ) {
       try {
         const response = await axios.get(url, {
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
@@ -31,36 +32,6 @@ export function useFetch(url: string, token: string | null  ) {
   console.log(data, loading, error, "Fetched properties");
 
   return { data, loading, error, message };
-}
-
-export function usePost(url: string, data: Property, token: string | null) {
-  const [response, setResponse] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(data),
-        });
-        const result = await response.json();
-        setResponse(result);
-      } catch (err) {
-        setError(err as Error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [url, data, token]);
-
-  return { response, loading, error };
 }
 
 export function useLocalStorage(key: string, initialValue: unknown) {

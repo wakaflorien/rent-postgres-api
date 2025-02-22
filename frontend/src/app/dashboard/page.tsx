@@ -11,6 +11,7 @@ import { useFetch, useLocalStorage } from '@/hooks';
 import BookingList from '@/components/BookingList';
 import { SAMPLE_PROPERTIES } from '../page';
 import { variablesDiv, variablesBtn } from '@/utils/motion';
+import axios from 'axios';
 
 
 export default function Dashboard() {
@@ -26,9 +27,10 @@ export default function Dashboard() {
         image_url: '',
         host_id: 'JQbUJITMdA/tGBchrAwqXwZxmKXukoM9IKTQRTFovgg',
     });
+    const [loading, setLoading] = useState(true);
 
     const [token, setToken] = useLocalStorage('token', '');
-    const { data, loading, error , message } = useFetch('http://localhost:3000/property/getAll', token);
+    const { data, loading: propertyLoading, error, message } = useFetch('http://localhost:3000/property/getAll', token);
     const { data: userData, loading: userLoading, error: userError, message: userMessage } = useFetch('http://localhost:3000/auth/profile', token);
 
     console.log(message, "Message");
@@ -43,8 +45,24 @@ export default function Dashboard() {
         setProperty({ ...property, [e.target.name]: e.target.value });
     };
 
-    const handleAddProperty = () => {
+    const handleAddProperty = async () => {
         console.log(property);
+        try {
+            const response = await axios.post('http://localhost:3000/property/create', property, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const result = await response.data;
+            console.log(result.data);
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoading(false);
+            setShowAddProperty(false);
+        }
     };
 
     const handleCancel = () => {
@@ -70,7 +88,7 @@ export default function Dashboard() {
         status: "pending"
     }]
 
-    if(!token){
+    if (!token) {
         router.push("/")
     }
 
