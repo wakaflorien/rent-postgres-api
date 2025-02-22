@@ -1,4 +1,4 @@
 
 node_modules/
-.env
 "# Node modules and env configuration"
+config.bat
