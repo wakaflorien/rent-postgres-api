@@ -16,7 +16,7 @@ import cors from "cors";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 // Initialize users table
 createUsersTable(db);
@@ -26,7 +26,7 @@ createReviewTable(db);
 
 // CORS Configuration
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'], // Allow both localhost and 127.0.0.1
+  origin: ['http://localhost:3001', 'http://127.0.0.1:3001'], 
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Origin', 'X-Requested-With', 'Accept', 'x-client-key', 'x-client-token', 'x-client-secret', 'Authorization'],
   credentials: true
@@ -53,20 +53,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-app.use("/api/v1/auth", authRoutes);
+app.use("/auth", authRoutes);
 
-app.use("/api/v1/property", propertyRoutes);
-app.use("/api/v1/booking", bookingRoutes);
-app.use("/api/v1/review", reviewRoutes);
+app.use("/property", propertyRoutes);
+app.use("/booking", bookingRoutes);
+app.use("/review", reviewRoutes);
 
 // Public route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the API" });
-});
-
-// Protected route
-app.get("/protected", isAuthenticated, (req, res) => {
-  res.json({ message: "Access granted", user: req.user });
 });
 
 app.listen(PORT, () => {

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation';
 import { workSans } from '@/utils/font'
 import { LuSearch, LuPlus } from 'react-icons/lu'
 import { Navbar } from '@/components/Navbar'
@@ -9,8 +10,11 @@ import { PropertyPost } from '@/@types'
 import { useFetch, useLocalStorage } from '@/hooks';
 import BookingList from '@/components/BookingList';
 import { SAMPLE_PROPERTIES } from '../page';
+import { variablesDiv, variablesBtn } from '@/utils/motion';
+
 
 export default function Dashboard() {
+    const router = useRouter();
     const [search, setSearch] = useState('');
     const [showAddProperty, setShowAddProperty] = useState(false);
     const [property, setProperty] = useState<PropertyPost>({
@@ -23,10 +27,13 @@ export default function Dashboard() {
         host_id: 'JQbUJITMdA/tGBchrAwqXwZxmKXukoM9IKTQRTFovgg',
     });
 
-    const { data, loading, error } = useFetch('http://localhost:3001/api/v1/property/getAll');
-    const [name, setName] = useLocalStorage('name', 'Guest');
+    const [token, setToken] = useLocalStorage('token', '');
+    const { data, loading, error , message } = useFetch('http://localhost:3000/property/getAll', token);
+    const { data: userData, loading: userLoading, error: userError, message: userMessage } = useFetch('http://localhost:3000/auth/profile', token);
 
-    console.log(data, loading, error, "Fetched properties");
+    console.log(message, "Message");
+    console.log(userMessage, "User Message", userData);
+    const [name, setName] = useLocalStorage('name', 'Guest');
 
     const handleSearch = () => {
         console.log(search);
@@ -63,9 +70,9 @@ export default function Dashboard() {
         status: "pending"
     }]
 
-    // if(!token){
-    //     router.push("/")
-    // }
+    if(!token){
+        router.push("/")
+    }
 
     return (
         <div className={` ${workSans.variable} min-h-screen max-w-7xl container mx-auto default-font`}>
@@ -77,7 +84,7 @@ export default function Dashboard() {
                 </header>
 
 
-                <motion.div className="w-full bg-white input input-bordered input-md !text-black flex items-center gap-2" initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+                <motion.div className="w-full bg-white input input-bordered input-md !text-black flex items-center gap-2" {...variablesDiv}>
                     <input
                         type={"text"}
                         placeholder="Search"
@@ -94,8 +101,8 @@ export default function Dashboard() {
                     </button>
                 </motion.div>
 
-                <motion.div className="w-full flex flex-row gap-4 justify-between" initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-                    <motion.button type="button" className="primary-btn" onClick={() => setShowAddProperty(!showAddProperty)}><LuPlus /> Add Property</motion.button>
+                <motion.div className="w-full flex flex-row gap-4 justify-between" {...variablesDiv}>
+                    <motion.button type="button" className="primary-btn" onClick={() => setShowAddProperty(!showAddProperty)} {...variablesBtn}><LuPlus /> Add Property</motion.button>
                 </motion.div>
 
                 {!showAddProperty ? (

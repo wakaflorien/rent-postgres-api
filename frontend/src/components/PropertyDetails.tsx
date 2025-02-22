@@ -4,7 +4,8 @@ import { workSans } from "@/utils/font";
 import { Property } from "../types";
 import { useState } from "react";
 import { LuCalendar } from "react-icons/lu";
-
+import { motion } from "motion/react";
+import { variablesDiv, variablesBtn } from "@/utils/motion";
 interface PropertyDetailsProps {
     property: Property;
 }
@@ -27,7 +28,7 @@ export const PropertyDetails = ({ property }: PropertyDetailsProps) => {
       };
 
     return (
-        <div className={`max-w-7xl mx-auto p-6 ${workSans.variable} default-font`}>
+        <div className={`max-w-7xl mx-auto p-6 ${workSans.variable} default-font`} {...variablesDiv}>
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                 {/* Property Header */}
                 <figure className="carousel-item relative h-96">
@@ -37,8 +38,8 @@ export const PropertyDetails = ({ property }: PropertyDetailsProps) => {
                         className="w-full h-full object-cover"
                     />
                     <div className={`absolute flex ${currentImageIndex > 0 ? 'justify-between' : 'justify-end'} transform -translate-y-1/2 left-5 right-5 top-1/2`}>
-                        {currentImageIndex > 0 && (<button onClick={previousImage} className="btn btn-circle btn-sm bg-black/50 text-white border-none hover:bg-black/70">❮</button>)}
-                        {currentImageIndex < property.images.length - 1 && (<button onClick={nextImage} className="btn btn-circle btn-sm bg-black/50 text-white border-none hover:bg-black/70">❯</button>)}
+                        {currentImageIndex > 0 && (<motion.button onClick={previousImage} className="btn btn-circle btn-sm bg-black/50 text-white border-none hover:bg-black/70" {...variablesBtn}>❮</motion.button>)}
+                        {currentImageIndex < property.images.length - 1 && (<motion.button onClick={nextImage} className="btn btn-circle btn-sm bg-black/50 text-white border-none hover:bg-black/70" {...variablesBtn}>❯</motion.button>)}
                     </div>
                     <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
                         {property.images.map((_, index) => (
@@ -115,9 +116,9 @@ export const PropertyDetails = ({ property }: PropertyDetailsProps) => {
                                 />
                                 <LuCalendar />
                             </label>
-                            <button className="w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/80 transition">
+                            <motion.button className="primary-btn" {...variablesBtn}>
                                 Book Now
-                            </button>
+                            </motion.button>
                         </div>
                     </div>
                 </div>

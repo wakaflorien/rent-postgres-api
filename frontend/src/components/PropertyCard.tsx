@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { workSans } from '@/utils/font';
 import { ReviewStars } from './ReviewStars';
 
+import { variablesBtn } from '@/utils/motion';
+import { motion } from 'motion/react';
 interface PropertyCardProps {
   property: Property;
 }
@@ -66,12 +68,13 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
         />
         <p className="text-xl font-bold">${property.price}/night</p>
         <div className="card-actions justify-end">
-          <button 
+          <motion.button 
             onClick={handleViewDetails}
-            className="btn btn-primary bg-primary hover:bg-primary/80 text-white border-none"
+            className="primary-btn"
+            {...variablesBtn}
           >
             View Details
-          </button>
+          </motion.button>
         </div>
       </div>
     </div>

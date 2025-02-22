@@ -17,6 +17,15 @@
   .default-font {
     @apply font-[family-name:var(--font-work-sans)] text-black;
   }
+  .primary-btn {
+    @apply btn btn-primary bg-secondary hover:bg-secondary/80 text-white px-4 py-2 rounded-md border-none hover:border-none;
+  }
+  .secondary-btn {
+    @apply btn btn-secondary bg-white hover:bg-white/80 text-black px-4 py-2 rounded-md border-none hover:border-none;
+  }
+  .danger-btn {
+    @apply btn btn-error bg-error hover:bg-error/80 text-white px-4 py-2 rounded-md border-none hover:border-none;
+  }
 }
 
 :root {

@@ -1,17 +1,24 @@
 import { Property } from "@/@types";
+import axios from "axios";
 import { useState, useEffect } from "react";
 
-export function useFetch(url: string) {
+export function useFetch(url: string, token: string | null  ) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(url);
-        const result = await response.json();
-        setData(result);
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const result = await response.data;
+        setData(result.data);
+        setMessage(result.message);
       } catch (err) {
         setError(err as Error);
       } finally {
@@ -19,9 +26,11 @@ export function useFetch(url: string) {
       }
     };
     fetchData();
-  }, [url]);
+  }, [url, token]);
 
-  return { data, loading, error };
+  console.log(data, loading, error, "Fetched properties");
+
+  return { data, loading, error, message };
 }
 
 export function usePost(url: string, data: Property, token: string | null) {
@@ -55,24 +64,24 @@ export function usePost(url: string, data: Property, token: string | null) {
 }
 
 export function useLocalStorage(key: string, initialValue: unknown) {
-    const [storedValue, setStoredValue] = useState(() => {
-      try {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : initialValue;
-      } catch (error) {
-        console.log(error);
-        return initialValue;
-      }
-    });
-  
-    const setValue = (value: unknown) => {
-      try {
-        setStoredValue(value);
-        localStorage.setItem(key, JSON.stringify(value));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-  
-    return [storedValue, setValue];
-  }
+  const [storedValue, setStoredValue] = useState(() => {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      console.log(error);
+      return initialValue;
+    }
+  });
+
+  const setValue = (value: unknown) => {
+    try {
+      setStoredValue(value);
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return [storedValue, setValue];
+}
